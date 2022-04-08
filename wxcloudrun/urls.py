@@ -14,13 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from wxcloudrun import views
-from django.conf.urls import url
+from django.conf.urls import url, include
 
-urlpatterns = (
-    # 计数器接口
-    url(r'^^api/count(/)?$', views.counter),
+from account.views import LoginView
+from account.weixin.viewsets import WxLogin
+from apps.test import test_view
+from apps.urls import url_custom
 
-    # 获取主页
-    url(r'(/)?$', views.index),
-)
+
+urlpatterns = [
+    # 登录相关
+    url(r'^login/', LoginView.as_view()),
+    url(r'^weixin/login/', WxLogin.as_view({"post":"create"})),
+    url(r'^test/', test_view)
+] + url_custom
